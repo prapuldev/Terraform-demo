@@ -1,22 +1,38 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'BUILD_ID', defaultValue: '0', description: 'Build ID from App Pipeline')
+
+    environment {
+        TF_DIR = '.'   // Terraform is in repo root
     }
+
     stages {
-        stage('Terraform Init & Apply') {
+        stage('Checkout') {
             steps {
-                dir("terraform") {
-                    sh """
-                    terraform init -input=false
-                    terraform apply -auto-approve -var="build_id=${params.BUILD_ID}"
-                    """
+                git branch: 'main', url: 'https://github.com/prapuldev/Terraform-demo.git'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'terraform init -input=false'
                 }
             }
         }
-        stage('Show Output File') {
+
+        stage('Terraform Plan') {
             steps {
-                sh "cat terraform/output.txt"
+                dir("${TF_DIR}") {
+                    sh 'terraform plan -input=false -out=tfplan'
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'terraform apply -auto-approve tfplan'
+                }
             }
         }
     }
