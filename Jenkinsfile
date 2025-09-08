@@ -33,12 +33,12 @@ pipeline {
         }
 
         stage('Terraform Apply') {
-            steps {
-                dir("${TF_DIR}") {
-                    sh "terraform apply -auto-approve tfplan -var=\"build_id=${BUILD_ID}\""
-                }
-            }
+    steps {
+        dir("${TF_DIR}") {
+            sh "terraform apply -auto-approve tfplan"
         }
+    }
+}
 
     }
 }
