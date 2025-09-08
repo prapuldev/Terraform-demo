@@ -27,7 +27,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 dir("${TF_DIR}") {
-                    sh 'terraform plan -input=false -out=tfplan -var="build_id=${BUILD_ID}"'
+                    sh "terraform plan -input=false -out=tfplan -var=\"build_id=${BUILD_ID}\""
                 }
             }
         }
@@ -35,9 +35,10 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir("${TF_DIR}") {
-                    sh 'terraform apply -auto-approve tfplan -var="build_id=${BUILD_ID}"'
+                    sh "terraform apply -auto-approve tfplan -var=\"build_id=${BUILD_ID}\""
                 }
             }
         }
+
     }
 }
