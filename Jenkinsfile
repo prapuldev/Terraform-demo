@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        TF_DIR = '.'   // Terraform is in repo root
-    }
+    TF_DIR = 'Infra-repo/terraform'
+}
+
 
     stages {
         stage('Checkout') {
